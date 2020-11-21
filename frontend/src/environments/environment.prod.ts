@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  base_url: 'https://eterfit.ovh/api',
+  base_url: 'https://h203.eps.ua.es/api',
 };
