@@ -1,0 +1,173 @@
+const Usuario = require('../models/usuarios');
+const { response } = require('express');
+const bcrypt = require('bcryptjs');
+
+
+const obtenerUsuarios = async(req, res = response) => {
+
+    // Lo tipamos
+    const desde = Number(req.query.desde) || 0; // Si no es número o no viene se inicializa a 0
+    const registropp = Number(process.env.DOCSPERPAGE); // Por página
+
+    // Id de usuario por si solo quiere buscar uno
+    const id = req.query.id;
+
+    try {
+
+        let usuarios, total;
+
+        // Si ha llegado Id, hacemos el get /id
+        if (id) {
+
+            [usuarios, total] = await Promise.all([
+                Usuario.findById(id),
+                Usuario.countDocuments()
+            ]);
+
+        }
+        // Si no ha llegado ID, hacemos el get / paginado
+        else {
+            // Lanzar de forma paralela, + eficiente (es una secuencia de promesas que se ejecutan de manera paralela)
+            [usuarios, total] = await Promise.all([
+                Usuario.find({}).skip(desde).limit(registropp), // await + asyn hace que tengamos que esperar a resultado; populate hace que el campo grupo no se vea como un id, sino que muestra la información del grupo
+                Usuario.countDocuments()
+            ]);
+        }
+
+        res.json({
+            ok: true,
+            msg: 'getUsuarios',
+            usuarios, // = usuarios: usuarios (porque se llaman igual)
+            page: {
+                desde,
+                registropp,
+                total
+            }
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            ok: false,
+            msg: 'Error al obtener grupos'
+        });
+    }
+}
+
+const crearUsuario = async(req, res = response) => {
+    // ya se habrán hecho todas las comprobaciones 
+    const { email, password } = req.body;
+
+    try {
+
+        // Comprobar que no existe un usuario con ese email registrado
+        const existeEmail = await Usuario.findOne({ email: email });
+
+        if (existeEmail) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Email ya existe'
+            });
+        }
+
+        // Cifrar la contraseña, obtenemos el salt y cifamos
+        const salt = bcrypt.genSaltSync(); // devuelve cadena pseudoaleatoria
+        const cpassword = bcrypt.hashSync(password, salt); // hash de la contraseña
+
+        // Tomamos todo lo que nos llega por el req.body excepto el alta, ya que la fecha de alta es autómatica
+        const { alta, ...object } = req.body;
+        const usuario = new Usuario(object);
+        usuario.password = cpassword;
+
+        // Alamacenar en BD
+        await usuario.save(); // almacenamos, esperar a que se resuelva save
+
+        res.json({
+            ok: true,
+            msg: 'crearUsuarios',
+            usuario
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.json({
+            ok: false,
+            msg: 'Error creando usuario'
+        });
+    }
+}
+
+const actualizarUsuario = async(req, res = response) => {
+
+    // Asegurarnos de que aunq venga el password no se va a actualizar, la modificacion del password es otra llamada
+    // Comprobar que si cambia el email no existe ya en BD, si no existe puede cambiarlo
+    const { password, email, alta, ...object } = req.body;
+    const uid = req.params.id;
+
+    try {
+
+        // Comprobar si está intentando cambiar el email, que no coincida con alguno que ya esté en BD
+        // Obtenemos si hay un usuario en BD con el email que nos llega en post
+        const existeEmail = await Usuario.findOne({ email: email });
+
+        if (existeEmail) {
+            // Si existe alguien con ese email tengo que ser yo
+            if (existeEmail._id != uid) {
+
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Email ya existe'
+                });
+            }
+        }
+        // Es el mismo o se actualiza correctamente
+        object.email = email;
+        // Password se ha extraido , no se actualiza
+        const usuario = await Usuario.findByIdAndUpdate(uid, object, { new: true }); // con 'new: true' nos devuelve usuario actualizado
+
+        res.json({
+            ok: true,
+            msg: 'Usuario actualizado',
+            usuario
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            ok: false,
+            msg: 'Error actualizando usuario'
+        });
+    }
+}
+
+const borrarUsuario = async(req, res = response) => {
+
+    const uid = req.params.id;
+
+    try {
+        // Comporbamos si esxiste el usuario que queremos borrar
+        const existeUsuario = await Usuario.findById(uid);
+        if (!existeUsuario) {
+            return res.status(400).json({
+                ok: true,
+                msg: 'El usuario no existe'
+            });
+        }
+        // Lo eliminamos y devolvemos el usuario recien eliminado
+        const resultado = await Usuario.findByIdAndRemove(uid);
+
+        res.json({
+            ok: true,
+            msg: 'Usuario eliminado',
+            resultado: resultado
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            ok: true,
+            msg: 'Error borrando usuario'
+        })
+    }
+}
+
+module.exports = { obtenerUsuarios, crearUsuario, actualizarUsuario, borrarUsuario }
