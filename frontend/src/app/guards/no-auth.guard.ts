@@ -1,23 +1,19 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { UsuarioService } from '../services/usuario.service';
 import { tap } from 'rxjs/operators';
+import { UsuarioService } from '../services/usuario.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class NoAuthGuard implements CanActivate {
 
   // Para utilizarlo que hay en service hay que inyectarlo en el constructor
   // Si no existe se crea
   constructor( private usuarioService: UsuarioService,
                private router: Router) {}
 
-  // Permite manejar cuando una ruta es o no accessible
-  // Devuelve observable (con true o false), hay que subscribirse, pero se subscribe automáticamente cuando
-  // se llama desde el routing
-  // quita tipados para evitar errores,no se si es necesario
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot) {
@@ -26,11 +22,11 @@ export class AuthGuard implements CanActivate {
     // Para poder realizar operaciones asíncronas,forma de decir, pipe
     // recoge resultado y se lo pasa a tap (operacion en segundo paso)
     // se pueden añadir muchos taps
-    return this.usuarioService.validarToken()
+    return this.usuarioService.validarNoToken()
             .pipe( // cuando se ejecute validarToken,se ejecuta esto,en este caso necesario para redirigir
               tap( res => {
                 if (!res) {
-                  this.router.navigateByUrl('/login');
+                  this.router.navigateByUrl('/dashboard');
                 }
               })
             );

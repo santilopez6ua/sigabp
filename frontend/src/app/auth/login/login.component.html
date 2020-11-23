@@ -37,8 +37,8 @@
             <div class="col-12">
                 <div class="form-group">
                     <div class="p-t-20">
-                        <button class="btn btn-info" id="to-recover" type="button" routerLink="/recovery"><i class="fa fa-lock m-r-5"></i>Recuperar Contraseña</button>
-                        <button class="btn btn-success float-right" type="submit">Login</button>
+                        <button class="btn btn-info" id="to-recover" type="button" routerLink="/recovery" [disabled]="waiting"><i class="fa fa-lock m-r-5"></i>Recuperar Contraseña</button>
+                        <button class="btn btn-success float-right" type="submit" [disabled]="waiting"><i class="fas fa-spinner fa-spin m-r-10" *ngIf="waiting"></i>Login</button>
                     </div>
                 </div>
             </div>

@@ -16075,3 +16075,7 @@ label {
         display: block!important
     }
 }
+
+.micursor {
+    cursor: pointer;
+}

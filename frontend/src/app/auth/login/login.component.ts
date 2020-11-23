@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 export class LoginComponent implements OnInit {
 
   public formSubmit = false;
+  public waiting = false;
 
   public loginForm = this.fb.group({ // nos permite crear objeto de tipo FB,con grupos de campos
     email: [localStorage.getItem('email') || '', [Validators.required, Validators.email] ], // si fuese solo una condicion,sin corchetes
@@ -33,13 +34,13 @@ export class LoginComponent implements OnInit {
     console.log(this.loginForm);
     if (!this.loginForm.valid) {
       console.warn('Errores en el formulario');
+      return;
     }
+
+    this.waiting = true;
 
     this.usuarioService.login(this.loginForm.value)
       .subscribe( res => {    // es necesario subcribirse al tratarse de un objeto asincrono
-        console.log('Respuesta al subscribe:', res);
-
-        localStorage.setItem('token', res['token']);
 
         if (this.loginForm.get('remember').value) {
           localStorage.setItem('email', this.loginForm.get('email').value);
@@ -53,11 +54,12 @@ export class LoginComponent implements OnInit {
         console.warn('Error respuesta api: ', err);
         Swal.fire({
           title: 'Error!',
-          text: err.error.msg,
+          text: err.error.msg || 'No se ha podido completar la acción,vuelva a intentarlos más tarde',
           icon: 'error',
           confirmButtonText: 'Ok',
-          backdrop: false
+          allowOutsideClick: false
         });
+        this.waiting = false;
       }); // si hay error
   }
 
