@@ -20,22 +20,23 @@ export class UsuarioService {
             .pipe(
               tap( res => {
                 localStorage.setItem('token', res['token']);
+                localStorage.setItem('rol', res['rol']); // Esto no es peligroso para la seguridad ??
               })
             );
   }
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('rol');
     this.router.navigateByUrl('/login');
   }
 
-  validarToken(): Observable<boolean>{
 
+  validar( correcto: boolean, incorrecto: boolean): Observable<boolean> {
     const token = localStorage.getItem('token') || '';
     if ( token === '') {
-      return of(false);
+      return of(incorrecto);
     }
-
 
     // Hay que subscribirse, pero aquí no, así que por eso devolvemos el get
     // Siempre que queramos recoger el resultado de un observable (llamada asincrona)
@@ -48,50 +49,27 @@ export class UsuarioService {
       // si es correcto ejecuto tap y map
       tap( res => {
         localStorage.setItem('token', res['token']);
-        console.log('Token renovado');
       }),
       // devuelve algo que es del mismo tipo que el get,en este caso un observable
       map ( res => {
-        return true;
+        return correcto;
       }),
       catchError ( err => {
         console.warn(err);
         // of permite devolver valor true o false en forma de observable
         localStorage.removeItem('token');
-        return of(false);
+        return of(incorrecto);
       })
     );
+  }
 
+
+  validarToken(): Observable<boolean>{
+    return this.validar(true, false);
   }
 
   validarNoToken(): Observable<boolean> {
-
-    const token = localStorage.getItem('token') || '';
-    if ( token === '') {
-      return of(true);
-    }
-
-    return this.http.get(`${environment.base_url}/login/token`, {
-      headers: {
-        'x-token': token
-      }
-    }).pipe(
-      // si es correcto ejecuto tap y map
-      tap( res => {
-        localStorage.setItem('token', res['token']);
-      }),
-      // devuelve algo que es del mismo tipo que el get,en este caso un observable
-      map ( res => {
-        return false;
-      }),
-      catchError ( err => {
-        console.warn(err);
-        // of permite devolver valor true o false en forma de observable
-        localStorage.removeItem('token');
-        return of(true);
-      })
-    );
-
+    return this.validar(false, true);
   }
 
 }

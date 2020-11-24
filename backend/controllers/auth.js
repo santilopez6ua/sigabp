@@ -27,10 +27,13 @@ const login = async(req, res = response) => {
             });
         }
 
+        const { _id, rol } = usuarioBD;
         const token = await generarJWT(usuarioBD._id, usuarioBD.rol);
         res.json({
             ok: true,
             msg: 'login',
+            _id,
+            rol,
             token
         });
 
@@ -61,14 +64,15 @@ const token = async(req, res = response) => {
                 token: ''
             });
         }
-        //
 
+        const nrol = usuarioBD.rol;
         const nuevoToken = await generarJWT(uid, rol);
-
 
         res.json({
             ok: true,
             msg: 'Token',
+            _id: uid,
+            rol: nrol,
             token: nuevoToken
         })
     } catch (error) {
