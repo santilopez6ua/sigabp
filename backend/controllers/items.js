@@ -29,7 +29,7 @@ const obtenerItems = async(req, res = repsonse) => {
             ]);
         }
 
-        res.status(400).json({
+        res.json({
             ok: true,
             msg: 'obtenerItems',
             items,
