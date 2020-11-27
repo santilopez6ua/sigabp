@@ -26,8 +26,7 @@ export class UsuarioService {
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('rol');
+    this.limpiarLocalStore();
     this.router.navigateByUrl('/login');
   }
 
@@ -35,6 +34,7 @@ export class UsuarioService {
   validar( correcto: boolean, incorrecto: boolean): Observable<boolean> {
     const token = localStorage.getItem('token') || '';
     if ( token === '') {
+      this.limpiarLocalStore();
       return of(incorrecto);
     }
 
@@ -58,7 +58,7 @@ export class UsuarioService {
       catchError ( err => {
         console.warn(err);
         // of permite devolver valor true o false en forma de observable
-        localStorage.removeItem('token');
+        this.limpiarLocalStore();
         return of(incorrecto);
       })
     );
@@ -71,6 +71,12 @@ export class UsuarioService {
 
   validarNoToken(): Observable<boolean> {
     return this.validar(false, true);
+  }
+
+
+  limpiarLocalStore() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('rol');
   }
 
 }

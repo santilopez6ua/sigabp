@@ -12,4 +12,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  algo( valor: number ) {
+    console.log('algo:',valor);
+  }
 }

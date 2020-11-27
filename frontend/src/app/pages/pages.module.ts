@@ -7,6 +7,8 @@ import { NavbarComponent } from '../commons/navbar/navbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { BreadcrumbComponent } from '../commons/breadcrumb/breadcrumb.component';
+import { ProgressbarComponent } from '../components/progressbar/progressbar.component';
+
 
 @NgModule({
   declarations: [
@@ -15,7 +17,8 @@ import { BreadcrumbComponent } from '../commons/breadcrumb/breadcrumb.component'
     NavbarComponent,
     DashboardComponent,
     UsuariosComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    ProgressbarComponent,
   ],
   exports: [
     AdminLayoutComponent,
