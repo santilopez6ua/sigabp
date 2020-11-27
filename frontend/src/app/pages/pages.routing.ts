@@ -6,13 +6,19 @@ import { AdminLayoutComponent } from '../layouts/admin-layout/admin-layout.compo
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 
-
+// Pasar info a ruta con data:
 const routes: Routes = [
   {
     path: 'dashboard', component: AdminLayoutComponent, canActivate: [ AuthGuard ],
     children: [
-      { path: '', component: DashboardComponent }, // siempre se genera
-      { path: 'usuarios', component: UsuariosComponent },
+      { path: '', component: DashboardComponent, data: {
+                                                          titulo: 'Dashboard', // siempre se genera
+                                                          breadcrumbs: [],
+                                                        }},
+      { path: 'usuarios', component: UsuariosComponent, data: {
+                                                          titulo: 'Usuarios',
+                                                          breadcrumbs: [{titulo: 'Dashboard', url: '/dashboard'}]
+                                                        }},
       { path: '**', redirectTo: ''}
     ]
   }

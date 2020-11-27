@@ -49,6 +49,7 @@ export class UsuarioService {
       // si es correcto ejecuto tap y map
       tap( res => {
         localStorage.setItem('token', res['token']);
+        localStorage.setItem('rol', res['rol']);
       }),
       // devuelve algo que es del mismo tipo que el get,en este caso un observable
       map ( res => {
