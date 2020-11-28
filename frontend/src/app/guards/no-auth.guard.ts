@@ -15,7 +15,8 @@ export class NoAuthGuard implements CanActivate {
                private router: Router) {}
 
   canActivate(
-    route: ActivatedRouteSnapshot,
+    next: ActivatedRouteSnapshot,
+    //route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot) {
     // Pipe -> coge todo lo que venga y haz una operación con ello
     // Tap -> forma de decir que se ejecuten operaciones secundarias
@@ -26,7 +27,18 @@ export class NoAuthGuard implements CanActivate {
             .pipe( // cuando se ejecute validarToken,se ejecuta esto,en este caso necesario para redirigir
               tap( res => {
                 if (!res) {
-                  this.router.navigateByUrl('/dashboard');
+                  switch (this.usuarioService.rol) {
+                    case 'ROL_ADMIN':
+                      this.router.navigateByUrl('/admin/dashboard');
+                      break;
+                    case 'ROL_ALUMNO':
+                      this.router.navigateByUrl('/alu/dashboard');
+                      break;
+                    case 'ROL_PROFESOR':
+                      this.router.navigateByUrl('/prof/dashboard');
+                      break;
+                  }
+                  //this.router.navigateByUrl('/dashboard');
                 }
               })
             );

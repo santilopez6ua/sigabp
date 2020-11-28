@@ -6,6 +6,7 @@
 
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { AuthRoutingModule } from './auth/auth.routing';
 import { PagesRoutingModule } from './pages/pages.routing';
 
@@ -13,7 +14,7 @@ import { PagesRoutingModule } from './pages/pages.routing';
 const routes: Routes = [
 
   // /login y /recovery --> auth.routing.module
-  // /dashboard/* --> pages.routing.module
+  // /admin/* /alu/* /prof/* --> pages.routing.module
 
   { path: '**', redirectTo: 'login'} // si me llega cualquier cosa, a login
 ];
@@ -26,7 +27,5 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-
-
 
 export class AppRoutingModule { }

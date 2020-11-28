@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from 'src/app/services/usuario.service';
+import { UsuarioService } from '../../services/usuario.service';
 
 @Component({
   selector: 'app-navbar',
@@ -8,9 +8,15 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 })
 export class NavbarComponent implements OnInit {
 
+  imagenUrl = '';
+
   constructor( private usuarioService: UsuarioService ) { }
 
   ngOnInit(): void {
+    this.usuarioService.cargarUsuario( this.usuarioService.uid )
+      .subscribe( res => {
+        this.imagenUrl = this.usuarioService.imagenURL;
+      });
   }
 
   logout() {

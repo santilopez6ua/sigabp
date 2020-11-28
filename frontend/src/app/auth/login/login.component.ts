@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.formSubmit = true;
 
-    console.log(this.loginForm);
+
     if (!this.loginForm.valid) {
       console.warn('Errores en el formulario');
       return;
@@ -48,7 +48,19 @@ export class LoginComponent implements OnInit {
           localStorage.removeItem('email');
         }
 
-        this.router.navigateByUrl('/dashboard');
+        this.waiting = false;
+
+        switch (this.usuarioService.rol) {
+          case 'ROL_ADMIN':
+            this.router.navigateByUrl('/admin/dashboard');
+            break;
+          case 'ROL_ALUMNO':
+            this.router.navigateByUrl('/alu/dashboard');
+            break;
+          case 'ROL_PROFESOR':
+            this.router.navigateByUrl('/prof/dashboard');
+            break;
+        }
 
       }, (err) => {
         console.warn('Error respuesta api: ', err);

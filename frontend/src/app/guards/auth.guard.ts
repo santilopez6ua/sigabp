@@ -19,7 +19,8 @@ export class AuthGuard implements CanActivate {
   // se llama desde el routing
   // quita tipados para evitar errores,no se si es necesario
   canActivate(
-    route: ActivatedRouteSnapshot,
+    next: ActivatedRouteSnapshot,
+    //router: ActivatedRouteSnapshot,
     state: RouterStateSnapshot) {
     // Pipe -> coge todo lo que venga y haz una operación con ello
     // Tap -> forma de decir que se ejecuten operaciones secundarias
@@ -31,6 +32,21 @@ export class AuthGuard implements CanActivate {
               tap( res => {
                 if (!res) {
                   this.router.navigateByUrl('/login');
+                } else {
+                  // Si la ruta no es para el rol del token, reenviamos a ruta base de rol del token
+                  if ((next.data.rol !== '*') && (this.usuarioService.rol !== next.data.rol)) {
+                    switch (this.usuarioService.rol) {
+                      case 'ROL_ADMIN':
+                        this.router.navigateByUrl('/admin/dashboard');
+                        break;
+                      case 'ROL_ALUMNO':
+                        this.router.navigateByUrl('/alu/dashboard');
+                        break;
+                      case 'ROL_PROFESOR':
+                        this.router.navigateByUrl('/prof/dashboard');
+                        break;
+                    }
+                  }
                 }
               })
             );
