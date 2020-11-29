@@ -17,6 +17,7 @@ router.get('/', [
     check('desde', 'El desde debe ser un número').optional().isNumeric(),
     validarCampos
 ], obtenerCursos);
+
 router.post('/', [
     validarJWT,
     check('nombre', 'El argumento nombre es obligatorio').not().isEmpty().trim(),
@@ -24,6 +25,7 @@ router.post('/', [
     check('activo', 'El argumento activo es obligatorio y debe ser true/false').isBoolean(),
     validarCampos,
 ], crearCurso);
+
 router.put('/:id', [
     validarJWT,
     check('nombre', 'El argumento nombre es obligatorio').not().isEmpty().trim(),
@@ -32,6 +34,7 @@ router.put('/:id', [
     check('id', 'El identificador no es válido').isMongoId(),
     validarCampos,
 ], actualizarCurso);
+
 router.delete('/:id', [
     validarJWT,
     check('id', 'El identificador no es válido').isMongoId(),

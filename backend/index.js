@@ -1,11 +1,13 @@
 /*
 Importación de módulos
 */
-require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+
+require('dotenv').config();
 const { dbConnection } = require('./database/configdb');
+
 
 // Crear una aplicación de express
 const app = express();
@@ -23,8 +25,8 @@ app.use(fileUpload({
 
 
 // cualquier cosa con la ruta usuarios lo atenderá el archivo usurios.js
-app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/login', require('./routes/auth'));
+app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/grupos', require('./routes/grupos'));
 app.use('/api/cursos', require('./routes/cursos'));
 app.use('/api/asignaturas', require('./routes/asignaturas'));

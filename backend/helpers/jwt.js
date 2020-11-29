@@ -2,7 +2,9 @@ const jwt = require('jsonwebtoken');
 
 // En forma de promesa -> si todo bien resolve, sino reject, y bloque try catch que invoca a esta funcion puede manejar error
 const generarJWT = (uid, rol) => {
+
     return new Promise((resolve, reject) => {
+
         const payload = {
             uid,
             rol

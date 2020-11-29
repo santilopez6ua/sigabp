@@ -6,11 +6,13 @@ const { validationResult } = require('express-validator');
    Next llama al siguiente paso (middleware)
 */
 const validarCampos = (req, res = response, next) => {
+
     const erroresVal = validationResult(req);
 
     if (!erroresVal.isEmpty()) {
         return res.status(400).json({
             ok: false,
+            msg: 'Argumentos recibidos inválidos',
             errores: erroresVal.mapped()
         });
     }

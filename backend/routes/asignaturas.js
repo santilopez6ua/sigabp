@@ -17,6 +17,7 @@ router.get('/', [
     check('desde', 'El desde debe ser un número').optional().isNumeric(),
     validarCampos,
 ], obtenerAsignaturas);
+
 router.post('/', [
     validarJWT,
     check('nombre', 'El argumento nombre es obligatorio').not().isEmpty().trim(),
@@ -26,6 +27,7 @@ router.post('/', [
     check('profesores.*.usuario', 'El identificador de profesor no es válido').optional().isMongoId(),
     validarCampos,
 ], crearAsignatura);
+
 router.put('/:id', [
     validarJWT,
     check('id', 'El identificador no es válido').isMongoId(),
@@ -36,6 +38,7 @@ router.put('/:id', [
     check('profesores.*.usuario', 'El identificador de profesor no es válido').optional().isMongoId(),
     validarCampos,
 ], actualizarAsignatura);
+
 router.delete('/:id', [
     validarJWT,
     check('id', 'El identificador no es válido').isMongoId(),

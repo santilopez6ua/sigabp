@@ -1,3 +1,11 @@
+/*******************************
+ * Utilizamos en lugar de interfaz
+ * Modelo es una clase con constructor y que puede tener métodos
+ * Mis propiedades que las de la Base de datos
+ * Para crearlo -> usu1: Usuario = new Usuario ('aa','aa',...)
+ * Va a almacenar información
+ */
+
 
 import { environment } from '../../environments/environment';
 
@@ -14,6 +22,7 @@ export class Usuario {
                  public activo?: boolean,
                  public imagen?: string) {}
 
+    // getter actúa como una propiedad más, y se accede igual
     get imagenUrl(): string {
         // Devolvemos la imagen en forma de peticilon a la API
         const token = localStorage.getItem('token') || '';

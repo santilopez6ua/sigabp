@@ -1,4 +1,4 @@
-const { response } = require('express');
+/*const { response } = require('express');
 const rolesPermitidos = ['ROL_ALUMNO', 'ROL_PROFESOR', 'ROL_ADMIN'];
 
 const validarRol = (req, res = response, next) => {
@@ -16,4 +16,4 @@ const validarRol = (req, res = response, next) => {
     next();
 }
 
-module.exports = { validarRol }
+module.exports = { validarRol }*/

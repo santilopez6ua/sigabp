@@ -18,6 +18,7 @@ router.get('/', [
     check('desde', 'El desde debe ser un número').optional().isNumeric(),
     validarCampos,
 ], obtenerItems);
+
 router.post('/', [
     validarJWT,
     check('nombre', 'El argumento nombre es obligatorio').not().isEmpty().trim(),
@@ -31,6 +32,7 @@ router.post('/', [
     check('horasAbsolutas', 'El argumento horasAbsolutas debe ser un true/false').optional().isBoolean(),
     validarCampos,
 ], crearItem);
+
 router.put('/:id', [
     validarJWT,
     check('id', 'El identificador no es válido').isMongoId(),
@@ -45,6 +47,7 @@ router.put('/:id', [
     check('horasAbsolutas', 'El argumento horasAbsolutas debe ser un true/false').optional().isBoolean(),
     validarCampos,
 ], actualizarItem);
+
 router.delete('/:id', [
     validarJWT,
     check('id', 'El identificador no es válido').isMongoId(),

@@ -17,7 +17,7 @@ import { PerfilComponent } from './perfil/perfil.component';
   /alu/*   --> páginas de alumno        [ROL_ALUMNO]
 
   data --> pasar informacion junto a la ruta para breadcrums y para AuthGuard {rol: 'ROL_ADMIN/ROL_PROFESOR/ROL_ALUMNO/*'}
-
+  el rol lo manejamos en las guardas
 */
 
 // Pasar info a ruta con data:

@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
   // se llama desde el routing
   // quita tipados para evitar errores,no se si es necesario
   canActivate(
-    next: ActivatedRouteSnapshot,
+    next: ActivatedRouteSnapshot, // aqui se recoge lo que pasamos en data
     //router: ActivatedRouteSnapshot,
     state: RouterStateSnapshot) {
     // Pipe -> coge todo lo que venga y haz una operación con ello

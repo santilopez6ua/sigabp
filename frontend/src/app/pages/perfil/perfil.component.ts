@@ -34,6 +34,8 @@ export class PerfilComponent implements OnInit {
     nuevopassword2: ['', Validators.required],
   })
 
+  // Inyectamos formbuilder para utilizarlo
+  // Cuando inyectamos un componente, no se crea uno nuevo, sino que utilizamos uno global
   constructor( private usuarioService: UsuarioService,
                private fb: FormBuilder,
                private router: Router) { }

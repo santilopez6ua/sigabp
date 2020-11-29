@@ -1,6 +1,8 @@
 const { response } = require('express');
 require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
+const { actualizarBD } = require('../helpers/actualizarbd');
+const fs = require('fs');
 
 const subirArchivo = async(req, res = repsonse) => {
 
@@ -8,6 +10,13 @@ const subirArchivo = async(req, res = repsonse) => {
         return res.status(400).json({
             ok: false,
             msg: 'No se ha enviado archivo'
+        });
+    }
+
+    if (!req.files.archivo) {
+        return res.status(400).json({
+            ok: false,
+            msg: `Debe enviarse el archivo como form-data llamado 'archivo'`,
         });
     }
 
@@ -61,7 +70,9 @@ const subirArchivo = async(req, res = repsonse) => {
             break;
     }
 
-    const patharchivo = `${process.env.PATHUPLOAD}/${tipo}/${uuidv4()}.${extension}`;
+    const path = `${process.env.PATHUPLOAD}/${tipo}`;
+    const nombreArchivo = `${uuidv4()}.${extension}`;
+    const patharchivo = `${path}/${nombreArchivo}`;
 
     archivo.mv(patharchivo, (err) => {
         if (err) {
@@ -71,11 +82,33 @@ const subirArchivo = async(req, res = repsonse) => {
                 tipoOperacion: tipo
             });
         }
+        const token = req.header('x-token');
+        // espera promesa, en then cuando llega resultado
+        actualizarBD(tipo, path, nombreArchivo, id, token)
+            .then(valor => {
 
-        res.json({
-            ok: true,
-            msg: 'subirArchivo'
-        });
+                if (!valor) {
+                    fs.unlinkSync(patharchivo);
+
+                    return res.status(400).json({
+                        ok: false,
+                        msg: `No se pudo establecer la nueva foto de perfil`,
+                    });
+                } else {
+                    res.json({
+                        ok: true,
+                        msg: 'subirArchivo',
+                        nombreArchivo
+                    });
+                }
+
+            }).catch(error => {
+                fs.unlinkSync(patharchivo);
+                return res.status(400).json({
+                    ok: false,
+                    msg: `Error al cargar archivo`
+                });
+            });
     })
 
 
@@ -83,11 +116,22 @@ const subirArchivo = async(req, res = repsonse) => {
 
 const enviarArchivo = async(req, res = repsonse) => {
 
-    res.json({
-        ok: true,
-        msg: 'enviarArchivo',
-        items,
-    });
+    const tipo = req.params.tipo; // fotoperfil(imgs) o evidencia(imgs,zip,pdf,...)
+    const nombreArchivo = req.params.nombrearchivo;
+
+    const path = `${process.env.PATHUPLOAD}/${tipo}`;
+    pathArchivo = `${path}/${nombreArchivo}`;
+
+    if (!fs.existsSync(pathArchivo)) {
+        if (tipo !== 'fotoperfil') {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Archivo no existe'
+            });
+        }
+        pathArchivo = `${process.env.PATHUPLOAD}/no-imagen.jpg`;
+    }
+    res.sendFile(pathArchivo);
 }
 
 module.exports = { subirArchivo, enviarArchivo }

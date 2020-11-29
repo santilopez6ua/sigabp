@@ -17,6 +17,7 @@ router.get('/', [
     check('desde', 'El desde debe ser un número').optional().isNumeric(),
     validarCampos,
 ], obtenerGrupos);
+
 router.post('/', [
     validarJWT,
     check('nombre', 'El argumento nombre es obligatorio').not().isEmpty().trim(),
@@ -27,6 +28,7 @@ router.post('/', [
     check('proyectodes').optional().trim(),
     validarCampos,
 ], crearGrupo);
+
 router.put('/:id', [
     validarJWT,
     check('nombre', 'El argumento nombre es obligatorio').not().isEmpty().trim(),
@@ -38,6 +40,7 @@ router.put('/:id', [
     check('proyectodes').optional().trim(),
     validarCampos,
 ], actualizarGrupo);
+
 router.delete('/:id', [
     validarJWT,
     check('id', 'El identificador no es válido').isMongoId(),

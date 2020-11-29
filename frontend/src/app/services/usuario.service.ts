@@ -1,4 +1,6 @@
 // SE encarga de comunicarse con nuestra API
+// Solo interesa tener el token en el Localstorage, lo demás es manipulable
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { loginForm } from '../interfaces/login-form.interface';
@@ -6,7 +8,7 @@ import { environment } from '../../environments/environment';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { Usuario } from '../interfaces/usuario.interface';
+import { Usuario } from '../models/usuario.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +16,7 @@ import { Usuario } from '../interfaces/usuario.interface';
 
 export class UsuarioService {
 
+  // al ser privada son necesario los getters
   private usuario: Usuario;
 
   constructor( private http: HttpClient,
@@ -51,13 +54,10 @@ export class UsuarioService {
       .pipe(
         // si es correcto ejecuto tap y map
         tap( (res: any) => {
-          //localStorage.setItem('token', res['token']);
-          //localStorage.setItem('rol', res['rol']);
           // extaemos los datos que nos ha devuelto y los guardamos en el usurio y en localstore
           const { uid, nombre, apellidos, email, rol, alta, activo, imagen, token} = res;
           localStorage.setItem('token', token);
           this.usuario = new Usuario(uid, rol, nombre, apellidos, email, alta, activo, imagen);
-
         }),
         // devuelve algo que es del mismo tipo que el get,en este caso un observable
         map ( res => {
