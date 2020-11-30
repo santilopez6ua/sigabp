@@ -56,8 +56,11 @@ export class UsuarioService {
         tap( (res: any) => {
           // extaemos los datos que nos ha devuelto y los guardamos en el usurio y en localstore
           const { uid, nombre, apellidos, email, rol, alta, activo, imagen, token} = res;
+         // console.log('(validar -> usuario.service.ts)', res);
+         // console.log('USUARIO ID (validar -> usuario.service.ts): ', uid);
           localStorage.setItem('token', token);
           this.usuario = new Usuario(uid, rol, nombre, apellidos, email, alta, activo, imagen);
+        //  console.log('(validar -> usuario.service.ts)', this.usuario);
         }),
         // devuelve algo que es del mismo tipo que el get,en este caso un observable
         map ( res => {
@@ -107,6 +110,7 @@ export class UsuarioService {
 
   cargarUsuario( uid: string ) {
     if (!uid) { uid = ''; }
+    console.log('Quiero cargar usuario');
     return this.http.get(`${environment.base_url}/usuarios/?id=${uid}`, this.cabeceras);
   }
 
@@ -115,10 +119,10 @@ export class UsuarioService {
   }
 
   subirFoto( uid: string, foto: File) {
-    const url = `${environment.base_url}/upload/fotoperfil/${uid}`;
+    const url = `${environment.base_url}/uploads/fotoperfil/${uid}`;
     const datos: FormData = new FormData();
     datos.append('archivo', foto, foto.name);
-    return this.http.post(`${environment.base_url}/upload/fotoperfil/${uid}`, datos, this.cabeceras);
+    return this.http.post(`${environment.base_url}/uploads/fotoperfil/${uid}`, datos, this.cabeceras);
   }
 
   cargarUsuarios( desde: number, textoBusqueda?: string ): Observable<object> {
@@ -147,7 +151,7 @@ export class UsuarioService {
   }
 
   get uid(): string {
-    return localStorage.getItem('uid') || '';
+    return this.usuario.uid;
   }
 
   get rol(): string {
@@ -171,6 +175,7 @@ export class UsuarioService {
   }
 
   get imagenURL(): string{
+   // console.log('Estas es la imagen: ', this.usuario.imagenUrl);
     return this.usuario.imagenUrl;
   }
 

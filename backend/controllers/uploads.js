@@ -122,6 +122,8 @@ const enviarArchivo = async(req, res = repsonse) => {
     const path = `${process.env.PATHUPLOAD}/${tipo}`;
     pathArchivo = `${path}/${nombreArchivo}`;
 
+    //  console.log('Este es el path: ', pathArchivo);
+
     if (!fs.existsSync(pathArchivo)) {
         if (tipo !== 'fotoperfil') {
             return res.status(400).json({

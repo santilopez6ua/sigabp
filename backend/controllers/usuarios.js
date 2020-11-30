@@ -157,7 +157,7 @@ const actualizarUsuario = async(req, res = response) => {
 
     // Asegurarnos de que aunq venga el password no se va a actualizar, la modificacion del password es otra llamada
     // Comprobar que si cambia el email no existe ya en BD, si no existe puede cambiarlo
-    const { password, email, alta, ...object } = req.body;
+    const { password, email, alta, activo, ...object } = req.body;
     const uid = req.params.id;
 
     try {

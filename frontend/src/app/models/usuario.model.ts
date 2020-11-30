@@ -27,8 +27,8 @@ export class Usuario {
         // Devolvemos la imagen en forma de peticilon a la API
         const token = localStorage.getItem('token') || '';
         if (!this.imagen) {
-            return `${base_url}/upload/fotoperfil/no-imagen?token=${token}`;
+            return `${base_url}/uploads/fotoperfil/no-imagen?token=${token}`;
         }
-        return `${base_url}/upload/fotoperfil/${this.imagen}?token=${token}`;
+        return `${base_url}/uploads/fotoperfil/${this.imagen}?token=${token}`;
     }
 }
