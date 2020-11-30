@@ -8,7 +8,7 @@ import { UsuarioService } from '../../services/usuario.service';
 })
 export class NavbarComponent implements OnInit {
 
-  imagenUrl = '';
+  imagenUrl: string = '';
 
   constructor( private usuarioService: UsuarioService ) { }
 

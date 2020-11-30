@@ -56,7 +56,7 @@ export class UsuarioComponent implements OnInit {
   }
 
   nuevo(): void {
-    //this.formSubmited = false;
+    this.formSubmited = false;
     this.datosForm.reset();
     this.nuevoPassword.reset();
     this.showOKP = false;

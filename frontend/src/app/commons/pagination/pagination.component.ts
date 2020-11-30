@@ -6,7 +6,7 @@ import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angu
   styleUrls: ['./pagination.component.css']
 })
 export class PaginationComponent implements OnInit, OnChanges {
-
+  // poner valores por defecto
   @Input() totalRegistros: number = 0;     // total de registros a paginar
   @Input() registroActual: number = 0;  // posicion actual dentro del total
   @Input() registrosPorPagina: number = 10;   // número de registros a mostrar por página

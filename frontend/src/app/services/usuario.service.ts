@@ -22,6 +22,52 @@ export class UsuarioService {
   constructor( private http: HttpClient,
                private router: Router ) { }
 
+
+  nuevoUsuario ( data: Usuario) {
+    return this.http.post(`${environment.base_url}/usuarios/`, data, this.cabeceras);
+  }
+
+  actualizarUsuario ( uid: string, data: Usuario ) {
+    return this.http.put(`${environment.base_url}/usuarios/${uid}`, data, this.cabeceras);
+  }
+
+  cambiarPassword( uid: string, data) {
+    return this.http.put(`${environment.base_url}/usuarios/np/${uid}`, data, this.cabeceras);
+  }
+
+  subirFoto( uid: string, foto: File) {
+    const url = `${environment.base_url}/uploads/fotoperfil/${uid}`;
+    const datos: FormData = new FormData();
+    datos.append('archivo', foto, foto.name);
+    return this.http.post(`${environment.base_url}/uploads/fotoperfil/${uid}`, datos, this.cabeceras);
+  }
+
+  cargarUsuario( uid: string ) {
+    if (!uid) { uid = ''; }
+    return this.http.get(`${environment.base_url}/usuarios/?id=${uid}`, this.cabeceras);
+  }
+
+  cargarUsuarios( desde: number, textoBusqueda?: string ): Observable<object> {
+    if (!desde) { desde = 0;}
+    if (!textoBusqueda) {textoBusqueda = '';}
+    return this.http.get(`${environment.base_url}/usuarios/?desde=${desde}&texto=${textoBusqueda}` , this.cabeceras);
+  }
+
+  borrarUsuario( uid: string) {
+    if (!uid || uid === null) {uid = 'a'; }
+    return this.http.delete(`${environment.base_url}/usuarios/${uid}` , this.cabeceras);
+  }
+
+  cargarListaUsuarios ( uids: string[]) {
+    const data = { lista: uids };
+    return this.http.post(`${environment.base_url}/usuarios/lista` , data, this.cabeceras);
+  }
+
+  cargarUsuariosRol ( rol: string, uids: string[]) {
+    const data = { lista: uids };
+    return this.http.post(`${environment.base_url}/usuarios/rol/${rol}`, data, this.cabeceras);
+  }
+
   login( formData: loginForm ) {
     return this.http.post(`${environment.base_url}/login`, formData)
             .pipe(
@@ -100,40 +146,13 @@ export class UsuarioService {
   }
 
 
-  nuevoUsuario ( data: Usuario) {
-    return this.http.post(`${environment.base_url}/usuarios/`, data, this.cabeceras);
-  }
+  crearImagenUrl( imagen: string) {
 
-  actualizarUsuario ( uid: string, data: Usuario ) {
-    return this.http.put(`${environment.base_url}/usuarios/${uid}`, data, this.cabeceras);
-  }
-
-  cargarUsuario( uid: string ) {
-    if (!uid) { uid = ''; }
-    console.log('Quiero cargar usuario');
-    return this.http.get(`${environment.base_url}/usuarios/?id=${uid}`, this.cabeceras);
-  }
-
-  cambiarPassword( uid: string, data) {
-    return this.http.put(`${environment.base_url}/usuarios/np/${uid}`, data, this.cabeceras);
-  }
-
-  subirFoto( uid: string, foto: File) {
-    const url = `${environment.base_url}/uploads/fotoperfil/${uid}`;
-    const datos: FormData = new FormData();
-    datos.append('archivo', foto, foto.name);
-    return this.http.post(`${environment.base_url}/uploads/fotoperfil/${uid}`, datos, this.cabeceras);
-  }
-
-  cargarUsuarios( desde: number, textoBusqueda?: string ): Observable<object> {
-    if (!desde) { desde = 0;}
-    if (!textoBusqueda) {textoBusqueda = '';}
-    return this.http.get(`${environment.base_url}/usuarios/?desde=${desde}&texto=${textoBusqueda}` , this.cabeceras);
-  }
-
-  borrarUsuario( uid: string) {
-    if (!uid || uid === null) {uid = 'a'; }
-    return this.http.delete(`${environment.base_url}/usuarios/${uid}` , this.cabeceras);
+    const token = localStorage.getItem('token') || '';
+    if (!imagen) {
+      return `${environment.base_url}/uploads/fotoperfil/no-imagen?token=${token}`;
+    }
+    return `${environment.base_url}/uploads/fotoperfil/${imagen}?token=${token}`;
   }
 
 

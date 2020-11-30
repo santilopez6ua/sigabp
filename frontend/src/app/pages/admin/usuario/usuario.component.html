@@ -1,5 +1,4 @@
 <div class="animate__animated animate__fadeInRight animate__faster">
-
     <div class="d-flex justify-content-center">
         <div class="card col-md-10">
             <div class="card-body">
@@ -24,7 +23,7 @@
                         </div>
                         <div class="col-lg-8 col-md-12">
                             <input type="text" class="form-control" formControlName="nombre" [ngClass]="{'is-invalid' : campoNoValido('nombre')}" id="nombre">
-                            <div class="invalid-feedback" *ngIf="campoNoValido('nombre')">
+                            <div class="invalid-feedback">
                                 El campo es obligatorio
                             </div>
                         </div>
@@ -35,7 +34,7 @@
                         </div>
                         <div class="col-lg-8 col-md-12">
                             <input type="text" class="form-control" formControlName="apellidos" [ngClass]="{'is-invalid' : campoNoValido('apellidos')}" id="apellidos">
-                            <div class="invalid-feedback" *ngIf="campoNoValido('apellidos')">
+                            <div class="invalid-feedback">
                                 El campo es obligatorio
                             </div>
                         </div>
@@ -46,7 +45,7 @@
                         </div>
                         <div class="col-lg-8 col-md-12 ">
                             <input type="text " class="form-control " formControlName="email" [ngClass]="{ 'is-invalid' : campoNoValido( 'email')} " id="email ">
-                            <div class="invalid-feedback " *ngIf="campoNoValido( 'email')">
+                            <div class="invalid-feedback ">
                                 El campo es obligatorio
                             </div>
                         </div>
@@ -57,7 +56,7 @@
                         </div>
                         <div class="col-lg-8 col-md-12">
                             <input type="password" class="form-control " formControlName="password" [ngClass]="{'is-invalid' : campoNoValido('password')}" id="password">
-                            <div class="invalid-feedback" *ngIf="campoNoValido('password')">
+                            <div class="invalid-feedback">
                                 El campo es obligatorio
                             </div>
                         </div>
@@ -69,9 +68,9 @@
                         </div>
                         <div class="col-lg-8 col-md-12 ">
                             <select class="select2 form-control custom-select" formControlName="rol" [ngClass]="{'is-invalid' : campoNoValido('rol')}" style="width: 100%; height:36px;" id="rol">
-                              <option value="ROL_ADMIN">Administrador</option>
-                              <option value="ROL_ALUMNO" selected>Alumno</option>
-                              <option value="ROL_PROFESOR">Profesor</option>
+                              <option value="ROL_ADMIN">Administrador / Adminsitradora</option>
+                              <option value="ROL_ALUMNO" selected>Alumno / Alumna</option>
+                              <option value="ROL_PROFESOR">Profesor / Profesora</option>
                           </select>
                             <div class="invalid-feedback">
                                 El campo es obligatorioas
@@ -85,8 +84,11 @@
                         <div class=" ">
                             <div>
                                 <div class="custom-control custom-checkbox ml-2">
-                                    <input type="checkbox" class="custom-control-input" formControlName="activo" id="activo" checked>
+                                    <input type="checkbox" class="custom-control-input" formControlName="activo" [ngClass]="{'is-invalid' : campoNoValido('activo')}" id="activo" checked>
                                     <label class="custom-control-label" for="activo">marcar para activar / desmarcar para desactivar</label>
+                                    <div class="invalid-feedback">
+                                        El campo es obligatorioas
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -44,6 +44,7 @@ export class UsuariosComponent implements OnInit {
           }
         } else {
           this.listaUsuarios = res['usuarios'];
+          console.log(this.listaUsuarios);
           this.totalusuarios = res['page'].total;
         }
         this.loading = false;
@@ -52,7 +53,10 @@ export class UsuariosComponent implements OnInit {
         //console.warn('error:', err);
         this.loading = false;
       });
+  }
 
+  crearImagenUrl(imagen: string) {
+    return this.ususuarioService.crearImagenUrl(imagen);
   }
 
   cambiarPagina( pagina: number ){
